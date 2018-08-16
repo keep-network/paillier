@@ -23,17 +23,16 @@ func Factorial(n int) *big.Int {
 // Generate a random element in the group of all the elements in Z/nZ that
 // has a multiplicative inverse.
 func GetRandomNumberInMultiplicativeGroup(n *big.Int, random io.Reader) (*big.Int, error) {
-	r, err := rand.Int(random, n)
-	if err != nil {
-		return nil, err
-	}
-	zero := big.NewInt(0)
-	one := big.NewInt(1)
-	if zero.Cmp(r) == 0 || one.Cmp(new(big.Int).GCD(nil, nil, n, r)) != 0 {
-		return GetRandomNumberInMultiplicativeGroup(n, random)
-	}
-	return r, nil
+	for {
+		r, err := rand.Int(random, n)
+		if err != nil {
+			return nil, err
+		}
 
+		if ZERO.Cmp(r) != 0 && ONE.Cmp(new(big.Int).GCD(nil, nil, n, r)) == 0 {
+			return r, nil
+		}
+	}
 }
 
 //  Return a random generator of RQn with high probability.  THIS METHOD
