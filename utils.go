@@ -20,8 +20,14 @@ func Factorial(n int) *big.Int {
 	return ret
 }
 
-// Generate a random element in the group of all the elements in Z/nZ that
-// has a multiplicative inverse.
+// Draws a non-zero, pseudorandom number from a group of integers modulo n.
+//
+// In modular arithmetic, the integers coprime to n from the set
+// {0, 1, ..., n-1} form a group under multiplication modulo n called
+// the multiplicative group if integers modulo n.
+//
+// Two numbers a and b are coprime (or relatively prime) if the only
+// positive integer that divides both of them is 1.
 func GetRandomNumberInMultiplicativeGroup(n *big.Int, random io.Reader) (*big.Int, error) {
 	for {
 		r, err := rand.Int(random, n)
