@@ -20,20 +20,25 @@ func Factorial(n int) *big.Int {
 	return ret
 }
 
-// Generate a random element in the group of all the elements in Z/nZ that
-// has a multiplicative inverse.
+// Draws a non-zero, pseudorandom number from a group of integers modulo n.
+//
+// In modular arithmetic, the integers coprime to n from the set
+// {0, 1, ..., n-1} form a group under multiplication modulo n called
+// the multiplicative group if integers modulo n.
+//
+// Two numbers a and b are coprime (or relatively prime) if the only
+// positive integer that divides both of them is 1.
 func GetRandomNumberInMultiplicativeGroup(n *big.Int, random io.Reader) (*big.Int, error) {
-	r, err := rand.Int(random, n)
-	if err != nil {
-		return nil, err
-	}
-	zero := big.NewInt(0)
-	one := big.NewInt(1)
-	if zero.Cmp(r) == 0 || one.Cmp(new(big.Int).GCD(nil, nil, n, r)) != 0 {
-		return GetRandomNumberInMultiplicativeGroup(n, random)
-	}
-	return r, nil
+	for {
+		r, err := rand.Int(random, n)
+		if err != nil {
+			return nil, err
+		}
 
+		if ZERO.Cmp(r) != 0 && ONE.Cmp(new(big.Int).GCD(nil, nil, n, r)) == 0 {
+			return r, nil
+		}
+	}
 }
 
 //  Return a random generator of RQn with high probability.  THIS METHOD
